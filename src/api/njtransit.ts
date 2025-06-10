@@ -25,7 +25,7 @@ interface Location {
 }
 
 class NJTransitBusData {
-  private testApiUrl = 'https://testpcsdata.njtransit.com/api/BUSDV2';
+  private testApiUrl = 'https://pcsdata.njtransit.com/api/BUSDV2'; //'https://testpcsdata.njtransit.com/api/BUSDV2';
   private productionApiUrl = 'https://pcsdata.njtransit.com/api/BUSDV2';
   private token: string | null = null;
   private username: string;
