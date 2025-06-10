@@ -11,7 +11,7 @@ async function fetchAndStoreBusData() {
       process.env.NJTRANSIT_PASSWORD || '',
       true
     );
-    const db = createClient('nonprod');
+    const db = createClient();
 
     // Use a large radius (1M feet ~190 miles) to cover a wide area
     const locations = await njTransit.getVehicleLocations(39.2776, -74.5750, 1000000, 'ALL');

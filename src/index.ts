@@ -7,7 +7,8 @@ async function main() {
   console.log('Environment variables:', {
     username: process.env.NJTRANSIT_USERNAME,
     password: process.env.NJTRANSIT_PASSWORD ? '****' : undefined,
-    supabaseUrl: process.env.SUPABASE_URL_NONPROD?.replace(/:([^@]+)@/, ':****@'),
+    supabaseUrl: (process.env.ENV === 'prod' ? process.env.SUPABASE_URL_PROD : process.env.SUPABASE_URL_NONPROD)?.replace(/:([^@]+)@/, ':****@'),
+    env: process.env.ENV || 'nonprod',
   });
 
   const njTransit = new NJTransitBusData(
@@ -15,7 +16,7 @@ async function main() {
     process.env.NJTRANSIT_PASSWORD || '',
     true // Use Production API
   );
-  const db = createClient('nonprod');
+  const db = createClient();
 
   // Test getLocations endpoint
   console.log('Testing getLocations endpoint...');
