@@ -1,0 +1,28 @@
+{
+  "name": "njtransit-tracker",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "migrate:generate": "bun run migrate:nonprod",
+    "migrate:nonprod": "bun run src/db/migrate.ts nonprod",
+    "migrate:prod": "bun run src/db/migrate.ts prod"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.3",
+    "axios": "^1.6.8",
+    "dotenv": "^16.4.5",
+    "drizzle-orm": "^0.44.2",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.15.4",
+    "bun-types": "latest",
+    "drizzle-kit": "^0.31.1",
+    "typescript": "^5.3.3",
+    "vite": "^5.4.8"
+  }
+}
