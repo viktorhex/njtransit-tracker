@@ -1,4 +1,5 @@
 import axios from 'axios';
+import FormData from 'form-data';
 import 'dotenv/config';
 
 interface AuthResponse {
@@ -43,17 +44,18 @@ class NJTransitBusData {
 
   async authenticate(): Promise<void> {
     console.log('Authenticating with NJTransit API...');
+    const formData = new FormData();
+    formData.append('username', this.username);
+    formData.append('password', this.password);
+
     try {
       const response = await axios.post<AuthResponse>(
         `${this.getBaseUrl()}/authenticateUser`,
-        {
-          username: this.username,
-          password: this.password,
-        },
+        formData,
         {
           headers: {
-            accept: 'application/json',
-            'Content-Type': 'multipart/form-data',
+            accept: 'text/plain',
+            ...formData.getHeaders(),
           },
         }
       );
@@ -63,9 +65,9 @@ class NJTransitBusData {
       } else {
         throw new Error('Authentication failed');
       }
-    } catch (e) {
-      console.error('Authentication error:', e);
-      throw e;
+    } catch (error) {
+      console.error('Authentication error:', error);
+      throw error;
     }
   }
 
@@ -76,17 +78,18 @@ class NJTransitBusData {
     console.log('Fetching locations with token:', this.token);
     console.log('Request params:', { mode });
 
+    const formData = new FormData();
+    formData.append('token', this.token!);
+    formData.append('mode', mode);
+
     try {
       const response = await axios.post<Location[]>(
         `${this.getBaseUrl()}/getLocations`,
-        {
-          token: this.token,
-          mode,
-        },
+        formData,
         {
           headers: {
-            accept: 'application/json',
-            'Content-Type': 'multipart/form-data',
+            accept: 'text/plain',
+            ...formData.getHeaders(),
           },
         }
       );
@@ -116,20 +119,21 @@ class NJTransitBusData {
     console.log('Fetching vehicle locations with token:', this.token);
     console.log('Request params:', { lat, lon, radius, mode });
 
+    const formData = new FormData();
+    formData.append('token', this.token!);
+    formData.append('lat', lat.toString());
+    formData.append('lon', lon.toString());
+    formData.append('radius', radius.toString());
+    formData.append('mode', mode);
+
     try {
       const response = await axios.post<VehicleLocation[]>(
         `${this.getBaseUrl()}/getVehicleLocations`,
-        {
-          token: this.token,
-          lat: lat.toString(),
-          lon: lon.toString(),
-          radius: radius.toString(),
-          mode,
-        },
+        formData,
         {
           headers: {
-            accept: 'application/json',
-            'Content-Type': 'multipart/form-data',
+            accept: 'text/plain',
+            ...formData.getHeaders(),
           },
         }
       );
