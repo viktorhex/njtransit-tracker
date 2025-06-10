@@ -2,6 +2,7 @@ import cron from 'node-cron';
 import NJTransitBusData from './api/njtransit';
 import { createClient } from './db/client';
 import { busLocations } from './db/schema';
+import { lt } from 'drizzle-orm';
 import 'dotenv/config';
 
 async function fetchAndStoreBusData() {
@@ -44,6 +45,14 @@ async function fetchAndStoreBusData() {
     } else {
       console.log(`[${new Date().toISOString()}] No bus locations found for routes 507/509`);
     }
+
+    // Delete data older than 15 minutes
+    const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
+    const deleted = await db.delete(busLocations)
+      .where(lt(busLocations.createdAt, fifteenMinutesAgo))
+      .returning({ deletedId: busLocations.id });
+    console.log(`[${new Date().toISOString()}] Deleted ${deleted.length} bus locations older than 15 minutes`);
+
   } catch (error) {
     console.error(`[${new Date().toISOString()}] Error fetching/storing bus data:`, error);
   }
@@ -54,5 +63,4 @@ cron.schedule('*/2 * * * *', fetchAndStoreBusData, {
   timezone: 'America/New_York',
 });
 
-console.log('Node version:', process.version);
 console.log('Cron job started, fetching bus data for routes 507/509 every 2 minutes');
