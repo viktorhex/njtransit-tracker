@@ -96,7 +96,7 @@ class NJTransitBusData {
           },
         }
       );
-      console.log('Locations response:', response.data);
+      //console.log('Locations response:', response.data);
       return response.data;
     } catch (error) {
       console.error('Get locations error:', error);
