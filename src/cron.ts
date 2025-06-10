@@ -13,7 +13,8 @@ async function fetchAndStoreBusData() {
     );
     const db = createClient('nonprod');
 
-    const locations = await njTransit.getVehicleLocations(39.2776, -74.5750, 5000, 'ALL');
+    // Use a large radius (1M feet ~190 miles) to cover a wide area
+    const locations = await njTransit.getVehicleLocations(39.2776, -74.5750, 1000000, 'ALL');
 
     // Filter for routes 507 and 509
     const filteredLocations = locations.filter(loc => ['507', '509'].includes(loc.VehicleRoute));
@@ -48,9 +49,9 @@ async function fetchAndStoreBusData() {
   }
 }
 
-// Schedule to run every 5 minutes
-cron.schedule('*/5 * * * *', fetchAndStoreBusData, {
+// Schedule to run every 2 minutes
+cron.schedule('*/2 * * * *', fetchAndStoreBusData, {
   timezone: 'America/New_York',
 });
 
-console.log('Cron job started, fetching bus data for routes 507/509 every 5 minutes');
+console.log('Cron job started, fetching bus data for routes 507/509 every 2 minutes');

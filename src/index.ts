@@ -22,30 +22,19 @@ async function main() {
   const locationsList = await njTransit.getLocations('ALL');
   console.log('Locations retrieved:', locationsList.length);
 
-  // Test getVehicleLocations with Ocean City
-  console.log('Fetching buses near Ocean City...');
-  let locations = await njTransit.getVehicleLocations(39.2776, -74.5750, 5000, 'ALL');
+  // Fetch all vehicles with a large radius (1M feet ~190 miles)
+  console.log('Fetching buses for routes 507/509...');
+  const locations = await njTransit.getVehicleLocations(39.2776, -74.5750, 1000000, 'ALL');
 
   // Filter for routes 507 and 509
-  let filteredLocations = locations.filter(loc => ['507', '509'].includes(loc.VehicleRoute));
+  const filteredLocations = locations.filter(loc => ['507', '509'].includes(loc.VehicleRoute));
 
   // Deduplicate by VehicleID and VehicleInternalTripNumber
-  let uniqueLocations = Array.from(
+  const uniqueLocations = Array.from(
     new Map(
       filteredLocations.map((loc) => [`${loc.VehicleID}-${loc.VehicleInternalTripNumber}`, loc])
     ).values()
   );
-
-  if (uniqueLocations.length === 0) {
-    console.log('No buses found near Ocean City for routes 507/509, trying Newark...');
-    locations = await njTransit.getVehicleLocations(40.736431, -74.167305, 5000, 'ALL');
-    filteredLocations = locations.filter(loc => ['507', '509'].includes(loc.VehicleRoute));
-    uniqueLocations = Array.from(
-      new Map(
-        filteredLocations.map((loc) => [`${loc.VehicleID}-${loc.VehicleInternalTripNumber}`, loc])
-      ).values()
-    );
-  }
 
   console.log('Unique locations to insert for routes 507/509:', uniqueLocations.length);
 
