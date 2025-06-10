@@ -25,7 +25,7 @@ interface Location {
 }
 
 class NJTransitBusData {
-  private testApiUrl = 'https://pcsdata.njtransit.com/api/BUSDV2'; //'https://testpcsdata.njtransit.com/api/BUSDV2';
+  private testApiUrl = 'https://pcsdata.njtransit.com/api/BUSDV2';
   private productionApiUrl = 'https://pcsdata.njtransit.com/api/BUSDV2';
   private token: string | null = null;
   private username: string;
@@ -33,6 +33,7 @@ class NJTransitBusData {
   private isProduction: boolean;
 
   constructor(username: string, password: string, isProduction: boolean = false) {
+    console.log('NJTransit API credentials:', { username, password: '****' });
     this.username = username;
     this.password = password;
     this.isProduction = isProduction;
@@ -55,6 +56,7 @@ class NJTransitBusData {
         {
           headers: {
             accept: 'text/plain',
+            'Accept-Encoding': 'gzip, deflate', // Exclude Brotli
             ...formData.getHeaders(),
           },
         }
@@ -89,6 +91,7 @@ class NJTransitBusData {
         {
           headers: {
             accept: 'text/plain',
+            'Accept-Encoding': 'gzip, deflate', // Exclude Brotli
             ...formData.getHeaders(),
           },
         }
@@ -133,6 +136,7 @@ class NJTransitBusData {
         {
           headers: {
             accept: 'text/plain',
+            'Accept-Encoding': 'gzip, deflate', // Exclude Brotli
             ...formData.getHeaders(),
           },
         }
