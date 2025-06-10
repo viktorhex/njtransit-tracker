@@ -141,7 +141,7 @@ class NJTransitBusData {
           },
         }
       );
-      console.log('Vehicle locations response:', response.data);
+      //console.log('Vehicle locations response:', response.data);
       return response.data;
     } catch (error) {
       console.error('Get vehicle locations error:', error);
