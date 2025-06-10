@@ -54,4 +54,5 @@ cron.schedule('*/2 * * * *', fetchAndStoreBusData, {
   timezone: 'America/New_York',
 });
 
+console.log('Node version:', process.version);
 console.log('Cron job started, fetching bus data for routes 507/509 every 2 minutes');
